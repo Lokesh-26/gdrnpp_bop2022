@@ -33,7 +33,7 @@ INPUT = dict(
 
 SOLVER = dict(
     IMS_PER_BATCH=8,   #48
-    TOTAL_EPOCHS=10,  # 10
+    TOTAL_EPOCHS=2,  # 10
     LR_SCHEDULER_NAME="flat_and_anneal",
     ANNEAL_METHOD="cosine",  # "cosine"
     ANNEAL_POINT=0.72,

@@ -164,6 +164,7 @@ def load_detections_into_dataset(
     """
 
     logger.info("Loading detections for {} from: {}".format(dataset_name, det_file))
+    det_file = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/datasets/BOP_DATASETS/br6d/test/test_bboxes/br6d_test_coco_format.json'
     detections = mmcv.load(det_file)
 
     meta = MetadataCatalog.get(dataset_name)

@@ -23,8 +23,10 @@ cv2.setNumThreads(0)  # pytorch issue 1355: possible deadlock in dataloader
 # thread safe and causes unwanted GPU memory allocations.
 cv2.ocl.setUseOpenCL(False)
 
-cur_dir = osp.dirname(osp.abspath(__file__))
-sys.path.insert(0, osp.join(cur_dir, "../../"))
+#cur_dir = osp.dirname(osp.abspath(__file__))
+cur_dir = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022'
+#sys.path.insert(0, osp.join(cur_dir, "../../"))
+sys.path.insert(0, cur_dir)
 from core.utils.default_args_setup import my_default_argument_parser, my_default_setup
 from core.utils.my_setup import setup_for_distributed
 from core.utils.my_checkpoint import MyCheckpointer
@@ -224,6 +226,10 @@ if __name__ == "__main__":
         help="the strategy for parallel training: dp | ddp | ddp_spawn | deepspeed | ddp_sharded",
     )
     args = parser.parse_args()
+
+    args.config_file = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/configs/gdrn/br6d/convnext_a6_AugCosyAAEGray_BG05_mlL1_DMask_amodalClipBox_classAware_br6d.py'
+    args.num_gpus = 2  # TODO change to 2 when training
+
     iprint("Command Line Args: {}".format(args))
 
     if args.eval_only and hard_limit < FILE_LIMIT:

@@ -22,7 +22,7 @@ model.backbone.width = 1.25
 
 model.head.num_classes = 3
 
-#train.init_checkpoint = "pretrained_models/yolox/yolox_x.pth"
+train.init_checkpoint = "/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/output/yolox/bop_pbr/yolox_x_640_augCozyAAEhsv_ranger_30_epochs_br6d_pbr_br6d_bop_test/model_final.pth"
 
 # datasets
 DATASETS.TRAIN = ["br6d_pbr_train"]

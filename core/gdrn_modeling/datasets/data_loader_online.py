@@ -32,6 +32,7 @@ from lib.vis_utils.image import grid_show, heatmap
 from .dataset_factory import register_datasets
 
 logger = logging.getLogger(__name__)
+root_dir = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022'
 
 
 def transform_instance_annotations(annotation, transforms, image_size, *, keypoint_hflip_indices=None):
@@ -318,8 +319,9 @@ class GDRN_Online_DatasetFromList(Base_DatasetFromList):
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
 
         dataset_name = dataset_dict["dataset_name"]
-
-        image = read_image_mmcv(dataset_dict["file_name"], format=self.img_format)
+        file_dir = dataset_dict["file_name"]
+        file_path = osp.join(root_dir, file_dir)
+        image = read_image_mmcv(file_path, format=self.img_format)
         if self.img_format == "L":
             image = np.expand_dims(image, 2).repeat(3, axis=2)
 
@@ -590,8 +592,9 @@ class GDRN_Online_DatasetFromList(Base_DatasetFromList):
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
 
         dataset_name = dataset_dict["dataset_name"]
-
-        image = read_image_mmcv(dataset_dict["file_name"], format=self.img_format)
+        file_dir = dataset_dict["file_name"]
+        file_path = osp.join(root_dir, file_dir)
+        image = read_image_mmcv(file_path, format=self.img_format)
         # should be consistent with the size in dataset_dict
         utils.check_image_size(dataset_dict, image)
         im_H_ori, im_W_ori = image.shape[:2]

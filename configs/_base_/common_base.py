@@ -25,11 +25,11 @@ VIS_PERIOD = 0
 INPUT = dict(
     # Whether the model needs RGB, YUV, HSV etc.
     FORMAT="BGR",
-    MIN_SIZE_TRAIN=480,
-    MAX_SIZE_TRAIN=640,
+    MIN_SIZE_TRAIN=1200,
+    MAX_SIZE_TRAIN=1944,
     MIN_SIZE_TRAIN_SAMPLING="choice",
-    MIN_SIZE_TEST=480,
-    MAX_SIZE_TEST=640,
+    MIN_SIZE_TEST=1200,
+    MAX_SIZE_TEST=1944,
     WITH_DEPTH=False,
     BP_DEPTH=False,  # backproject depth
     AUG_DEPTH=False,

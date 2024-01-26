@@ -19,8 +19,10 @@ cv2.ocl.setUseOpenCL(False)
 
 import sys
 
-cur_dir = osp.dirname(osp.abspath(__file__))
-sys.path.insert(0, osp.join(cur_dir, "../../../"))
+#cur_dir = osp.dirname(osp.abspath(__file__))
+cur_dir = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022'
+#sys.path.insert(0, osp.join(cur_dir, "../../../"))
+sys.path.insert(0, cur_dir)
 
 from lib.utils.time_utils import get_time_str
 import core.utils.my_comm as comm
@@ -67,6 +69,9 @@ def main(args):
 
 if __name__ == "__main__":
     args = default_argument_parser().parse_args()
+    args.config_file = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/configs/yolox/bop_pbr/yolox_x_640_augCozyAAEhsv_ranger_30_epochs_br6d_pbr_br6d_bop_test.py'
+    args.num_gpus = 1  # TODO change to 2 when training
+    args.eval_only = True
     launch(
         main,
         args.num_gpus,
@@ -74,4 +79,5 @@ if __name__ == "__main__":
         machine_rank=args.machine_rank,
         dist_url=args.dist_url,
         args=(args,),
+
     )

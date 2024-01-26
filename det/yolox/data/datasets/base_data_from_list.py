@@ -25,6 +25,7 @@ from .datasets_wrapper import Dataset
 logger = logging.getLogger(__name__)
 
 
+root_dir = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022'
 default_input_cfg = OmegaConf.create(
     dict(
         img_format="BGR",
@@ -33,7 +34,7 @@ default_input_cfg = OmegaConf.create(
         aug_depth=False,
         # bg ----------------
         bg_type="VOC_table",
-        bg_imgs_root="datasets/VOCdevkit/VOC2012/",
+        bg_imgs_root="/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/datasets/VOCdevkit/VOC2012",
         num_bg_imgs=10000,
         change_bg_prob=0.0,  # prob to change bg of real image
         bg_keep_aspect_ratio=True,
@@ -204,7 +205,8 @@ class Base_DatasetFromList(Dataset):
         cfg = self.cfg
         dataset_dict = self._get_sample_dict(index)
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
-        file_name = dataset_dict["file_name"]
+        file_dir = dataset_dict["file_name"]
+        file_name= osp.join(root_dir, file_dir)
         img = self.load_resized_img(file_name)
 
         target, resized_info = self.load_anno(index)

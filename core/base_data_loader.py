@@ -342,7 +342,8 @@ class Base_DatasetFromList(data.Dataset):
         cfg = self.cfg
         # random.choice(bg_img_paths)
         bg_type = try_get_key(cfg, "INPUT.BG_TYPE", "bg_type")
-        bg_root = try_get_key(cfg, "INPUT.BG_IMGS_ROOT", "bg_imgs_root")
+        #bg_root = try_get_key(cfg, "INPUT.BG_IMGS_ROOT", "bg_imgs_root")
+        bg_root = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/datasets/BOP_DATASETS/VOCdevkit/VOC2012/'
         num_bg_imgs = try_get_key(cfg, "INPUT.NUM_BG_IMGS", "num_bg_imgs")
         hashed_file_name = hashlib.md5(
             ("{}_{}_{}_get_bg_imgs".format(bg_root, num_bg_imgs, bg_type)).encode("utf-8")

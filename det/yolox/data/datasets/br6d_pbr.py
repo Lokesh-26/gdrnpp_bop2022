@@ -4,8 +4,9 @@ import os
 import os.path as osp
 import sys
 
-cur_dir = osp.dirname(osp.abspath(__file__))
-PROJ_ROOT = osp.normpath(osp.join(cur_dir, "../../../.."))
+#cur_dir = osp.dirname(osp.abspath(__file__))
+#PROJ_ROOT = osp.normpath(osp.join(cur_dir, "../../../.."))
+PROJ_ROOT = '/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/'
 sys.path.insert(0, PROJ_ROOT)
 import time
 from collections import OrderedDict
