@@ -154,8 +154,9 @@ for error_dir_path in p["error_dir_paths"]:
 
     # Parse info about the errors from the folder name.
     error_sign = osp.basename(error_dir_path)
-    err_type = str(error_sign.split("_")[0].split(":")[1])
-    n_top = int(error_sign.split("_")[1].split(":")[1])
+    # err_type = str(error_sign.split("_")[0].split(":")[1])
+    err_type = str(error_sign.split("_")[1])
+    n_top = int(error_sign.split("_")[3])
     result_info = osp.basename(osp.dirname(error_dir_path)).split("_")
     method = result_info[0]
     dataset_info = result_info[1].split("-")

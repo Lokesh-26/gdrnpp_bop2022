@@ -112,15 +112,15 @@ class br6d_BOP_TEST_Dataset:
 
             # NOTE: currently no gt info available
             # load infos for each scene
-            # gt_dicts = {}
-            # gt_info_dicts = {}
+            gt_dicts = {}
+            gt_info_dicts = {}
             cam_dicts = {}
             for scene_id, im_id in scene_im_ids:
                 scene_root = osp.join(self.dataset_root, f"{scene_id:06d}")
-                # if scene_id not in gt_dicts:
-                #     gt_dicts[scene_id] = mmcv.load(osp.join(scene_root, 'scene_gt.json'))
-                # if scene_id not in gt_info_dicts:
-                #     gt_info_dicts[scene_id] = mmcv.load(osp.join(scene_root, 'scene_gt_info.json'))  # bbox_obj, bbox_visib
+                if scene_id not in gt_dicts:
+                    gt_dicts[scene_id] = mmcv.load(osp.join(scene_root, 'scene_gt.json'))
+                if scene_id not in gt_info_dicts:
+                    gt_info_dicts[scene_id] = mmcv.load(osp.join(scene_root, 'scene_gt_info.json'))  # bbox_obj, bbox_visib
                 if scene_id not in cam_dicts:
                     cam_dicts[scene_id] = mmcv.load(osp.join(scene_root, "scene_camera.json"))
 
@@ -150,64 +150,64 @@ class br6d_BOP_TEST_Dataset:
                     "img_type": "real",
                 }
                 im_id_global += 1
-                # insts = []
-                # for anno_i, anno in enumerate(gt_dicts[scene_id][str_im_id]):
-                #     obj_id = anno['obj_id']
-                #     if ref.br6d.id2obj[obj_id] not in self.select_objs:
-                #         continue
-                #     cur_label = self.cat2label[obj_id]  # 0-based label
-                #     R = np.array(anno['cam_R_m2c'], dtype='float32').reshape(3, 3)
-                #     t = np.array(anno['cam_t_m2c'], dtype='float32') / 1000.0
-                #     pose = np.hstack([R, t.reshape(3, 1)])
-                #     quat = mat2quat(R).astype('float32')
-                #     allo_q = mat2quat(egocentric_to_allocentric(pose)[:3, :3]).astype('float32')
+                insts = []
+                for anno_i, anno in enumerate(gt_dicts[scene_id][str_im_id]):
+                    obj_id = anno['obj_id']
+                    if ref.br6d.id2obj[obj_id] not in self.select_objs:
+                        continue
+                    cur_label = self.cat2label[obj_id]  # 0-based label
+                    R = np.array(anno['cam_R_m2c'], dtype='float32').reshape(3, 3)
+                    t = np.array(anno['cam_t_m2c'], dtype='float32') / 1000.0
+                    pose = np.hstack([R, t.reshape(3, 1)])
+                    quat = mat2quat(R).astype('float32')
+                    allo_q = mat2quat(egocentric_to_allocentric(pose)[:3, :3]).astype('float32')
 
-                #     proj = (record["cam"] @ t.T).T
-                #     proj = proj[:2] / proj[2]
+                    proj = (record["cam"] @ t.T).T
+                    proj = proj[:2] / proj[2]
 
-                #     bbox_visib = gt_info_dicts[scene_id][str_im_id][anno_i]['bbox_visib']
-                #     bbox_obj = gt_info_dicts[scene_id][str_im_id][anno_i]['bbox_obj']
-                #     x1, y1, w, h = bbox_visib
-                #     if self.filter_invalid:
-                #         if h <= 1 or w <= 1:
-                #             self.num_instances_without_valid_box += 1
-                #             continue
+                    bbox_visib = gt_info_dicts[scene_id][str_im_id][anno_i]['bbox_visib']
+                    bbox_obj = gt_info_dicts[scene_id][str_im_id][anno_i]['bbox_obj']
+                    x1, y1, w, h = bbox_visib
+                    if self.filter_invalid:
+                        if h <= 1 or w <= 1:
+                            self.num_instances_without_valid_box += 1
+                            continue
 
-                #     mask_file = osp.join(scene_root, "mask/{:06d}_{:06d}.png".format(im_id, anno_i))
-                #     mask_visib_file = osp.join(scene_root, "mask_visib/{:06d}_{:06d}.png".format(im_id, anno_i))
-                #     assert osp.exists(mask_file), mask_file
-                #     assert osp.exists(mask_visib_file), mask_visib_file
-                #     # load mask visib
-                #     mask_single = mmcv.imread(mask_visib_file, "unchanged")
-                #     area = mask_single.sum()
-                #     if area < 3:  # filter out too small or nearly invisible instances
-                #         self.num_instances_without_valid_segmentation += 1
-                #         continue
-                #     mask_rle = binary_mask_to_rle(mask_single, compressed=True)
+                    mask_file = osp.join(scene_root, "mask/{:06d}_{:06d}.png".format(im_id, anno_i))
+                    mask_visib_file = osp.join(scene_root, "mask_visib/{:06d}_{:06d}.png".format(im_id, anno_i))
+                    assert osp.exists(mask_file), mask_file
+                    assert osp.exists(mask_visib_file), mask_visib_file
+                    # load mask visib
+                    mask_single = mmcv.imread(mask_visib_file, "unchanged")
+                    area = mask_single.sum()
+                    if area < 3:  # filter out too small or nearly invisible instances
+                        self.num_instances_without_valid_segmentation += 1
+                        continue
+                    mask_rle = binary_mask_to_rle(mask_single, compressed=True)
 
-                #    # load mask full
-                #     mask_full = mmcv.imread(mask_file, "unchanged")
-                #     mask_full = mask_full.astype("bool")
-                #     mask_full_rle = binary_mask_to_rle(mask_full, compressed=True)
+                   # load mask full
+                    mask_full = mmcv.imread(mask_file, "unchanged")
+                    mask_full = mask_full.astype("bool")
+                    mask_full_rle = binary_mask_to_rle(mask_full, compressed=True)
 
-                #     inst = {
-                #         'category_id': cur_label,  # 0-based label
-                #         'bbox': bbox_visib,  # TODO: load both bbox_obj and bbox_visib
-                #         'bbox_mode': BoxMode.XYWH_ABS,
-                #         'pose': pose,
-                #         "quat": quat,
-                #         "trans": t,
-                #         "allo_quat": allo_q,
-                #         "centroid_2d": proj,  # absolute (cx, cy)
-                #         "segmentation": mask_rle,
-                #         "mask_full": mask_full_rle,
-                #     }
-                #     for key in [
-                #             "bbox3d_and_center", "fps4_and_center", "fps8_and_center", "fps12_and_center",
-                #             "fps16_and_center", "fps20_and_center"
-                #     ]:
-                #         inst[key] = self.models[cur_label][key]
-                #     insts.append(inst)
+                    inst = {
+                        'category_id': cur_label,  # 0-based label
+                        'bbox': bbox_visib,  # TODO: load both bbox_obj and bbox_visib
+                        'bbox_mode': BoxMode.XYWH_ABS,
+                        'pose': pose,
+                        "quat": quat,
+                        "trans": t,
+                        "allo_quat": allo_q,
+                        "centroid_2d": proj,  # absolute (cx, cy)
+                        "segmentation": mask_rle,
+                        "mask_full": mask_full_rle,
+                    }
+                    for key in [
+                            "bbox3d_and_center", "fps4_and_center", "fps8_and_center", "fps12_and_center",
+                            "fps16_and_center", "fps20_and_center"
+                    ]:
+                        inst[key] = self.models[cur_label][key]
+                    insts.append(inst)
                 # if len(insts) == 0:  # filter im without anno
                 #     continue
                 # record['annotations'] = insts
@@ -415,20 +415,20 @@ def test_vis():
         depth = mmcv.imread(d["depth_file"], "unchanged") / d["depth_factor"]
 
         imH, imW = img.shape[:2]
-        # annos = d["annotations"]
-        # masks = [cocosegm2mask(anno["segmentation"], imH, imW) for anno in annos]
-        # bboxes = [anno["bbox"] for anno in annos]
-        # bbox_modes = [anno["bbox_mode"] for anno in annos]
-        # bboxes_xyxy = np.array(
-        #     [BoxMode.convert(box, box_mode, BoxMode.XYXY_ABS) for box, box_mode in zip(bboxes, bbox_modes)])
-        # kpts_3d_list = [anno["bbox3d_and_center"] for anno in annos]
-        # quats = [anno["quat"] for anno in annos]
-        # transes = [anno["trans"] for anno in annos]
-        # Rs = [quat2mat(quat) for quat in quats]
-        # # 0-based label
-        # cat_ids = [anno["category_id"] for anno in annos]
-        # K = d["cam"]
-        # kpts_2d = [misc.project_pts(kpt3d, K, R, t) for kpt3d, R, t in zip(kpts_3d_list, Rs, transes)]
+        annos = d["annotations"]
+        masks = [cocosegm2mask(anno["segmentation"], imH, imW) for anno in annos]
+        bboxes = [anno["bbox"] for anno in annos]
+        bbox_modes = [anno["bbox_mode"] for anno in annos]
+        bboxes_xyxy = np.array(
+            [BoxMode.convert(box, box_mode, BoxMode.XYXY_ABS) for box, box_mode in zip(bboxes, bbox_modes)])
+        kpts_3d_list = [anno["bbox3d_and_center"] for anno in annos]
+        quats = [anno["quat"] for anno in annos]
+        transes = [anno["trans"] for anno in annos]
+        Rs = [quat2mat(quat) for quat in quats]
+        # 0-based label
+        cat_ids = [anno["category_id"] for anno in annos]
+        K = d["cam"]
+        kpts_2d = [misc.project_pts(kpt3d, K, R, t) for kpt3d, R, t in zip(kpts_3d_list, Rs, transes)]
 
         # # TODO: visualize pose and keypoints
         # labels = [objs[cat_id] for cat_id in cat_ids]

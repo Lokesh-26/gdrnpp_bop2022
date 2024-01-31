@@ -11,7 +11,6 @@ from os.path import join
 from lib.pysixd import inout
 from lib.utils.utils import iprint
 
-
 def get_camera_params(datasets_path, dataset_name, cam_type=None):
     """Returns camera parameters for the specified dataset.
 
@@ -91,6 +90,7 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
         "ycbv": list(range(1, 22)),
         "ycbvposecnn": list(range(1, 22)),
         "hope": list(range(1, 29)),
+        "br6d": list(range(1, 4)),
     }[dataset_name]
 
     # ID's of objects with ambiguous views evaluated using the ADI pose error
@@ -129,6 +129,7 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
         "ycbv": [1, 13, 14, 16, 18, 19, 20, 21],  # bop symmetric objs
         "ycbvposecnn": [13, 16, 19, 20, 21],  # posecnn symmetric objs
         "hope": None,  # Not defined yet.
+        "br6d": None,  # Not defined yet.
     }[dataset_name]
 
     # T-LESS includes two types of object models, CAD and reconstructed.
@@ -396,6 +397,21 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
             p["depth_range"] = None  # Not calculated yet.
             p["azimuth_range"] = None  # Not calculated yet.
             p["elev_range"] = None  # Not calculated yet.
+
+    # BR6D.
+    elif dataset_name == 'br6d':
+        p['scene_ids'] = {
+            'train': list(range(0, 3)),
+            'val': [],
+            'test': list(range(3, 5))
+            #'test': [list(range(4, 6))]
+        }[split]
+        p['im_size'] = (1944, 1200)
+
+    if split == 'test':
+        p['depth_range'] = None  # Not calculated yet.
+        p['azimuth_range'] = None  # Not calculated yet.
+        p['elev_range'] = None  # Not calculated yet.
 
     else:
         raise ValueError("Unknown BOP dataset ({}).".format(dataset_name))

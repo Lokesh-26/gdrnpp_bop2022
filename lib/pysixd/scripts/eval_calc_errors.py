@@ -48,6 +48,7 @@ p = {
         "tyol": 15,
         "ycbv": 15,
         "hope": 15,
+        "br6d": 15,
     },
     "vsd_taus": list(np.arange(0.05, 0.51, 0.05)),
     "vsd_normalized_by_diameter": True,
@@ -61,7 +62,7 @@ p = {
     # stored in folder p['results_path']). See docs/bop_challenge_2019.md for a
     # description of the format. Example results can be found at:
     # http://ptak.felk.cvut.cz/6DB/public/bop_sample_results/bop_challenge_2019/
-    "result_filenames": ["/path/to/csv/with/results"],
+    "result_filenames": ["/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/output/gdrn/br6d/convnext_a6_AugCosyAAEGray_BG05_mlL1_DMask_amodalClipBox_classAware_br6d/inference_model_final/br6d_test/convnext-a6-AugCosyAAEGray-BG05-mlL1-DMask-amodalClipBox-classAware-br6d-test-iter0_br6d-test.csv"],
     # Folder with results to be evaluated.
     "results_path": config.results_path,
     # Folder for the calculated pose errors and performance scores.

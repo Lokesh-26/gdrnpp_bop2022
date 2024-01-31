@@ -1,7 +1,7 @@
 # about 3 days
 _base_ = ["../../_base_/gdrn_base.py"]
 
-OUTPUT_DIR = "output/gdrn/br6d/convnext_a6_AugCosyAAEGray_BG05_mlL1_DMask_amodalClipBox_classAware_br6d"
+OUTPUT_DIR = "/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/output/gdrn/br6d/convnext_a6_AugCosyAAEGray_BG05_mlL1_DMask_amodalClipBox_classAware_br6d"
 INPUT = dict(
     DZI_PAD_SCALE=1.5,
     TRUNCATE_FG=True,
@@ -32,7 +32,7 @@ INPUT = dict(
 )
 
 SOLVER = dict(
-    IMS_PER_BATCH=8,   #48
+    IMS_PER_BATCH=8,  # 8
     TOTAL_EPOCHS=2,  # 10
     LR_SCHEDULER_NAME="flat_and_anneal",
     ANNEAL_METHOD="cosine",  # "cosine"
@@ -40,13 +40,14 @@ SOLVER = dict(
     OPTIMIZER_CFG=dict(_delete_=True, type="Ranger", lr=8e-4, weight_decay=0.01),
     WEIGHT_DECAY=0.0,
     WARMUP_FACTOR=0.001,
-    WARMUP_ITERS=100,   # 1000
+    WARMUP_ITERS=10,  # 1000
 )
 
 DATASETS = dict(
     TRAIN=("br6d_pbr_train",),
     TEST=("br6d_test",),
-    DET_FILES_TEST=("datasets/BOP_DATASETS/br6d/test/test_bboxes/br6d_test_coco_format.json",),
+    DET_FILES_TEST=(
+    "/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/datasets/BOP_DATASETS/br6d/test/test_bboxes/br6d_test_coco_format.json",),
 )
 
 DATALOADER = dict(
@@ -56,6 +57,7 @@ DATALOADER = dict(
 )
 
 MODEL = dict(
+    #WEIGHTS="/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/core/gdrn_modeling/output/gdrn/br6d/convnext_a6_AugCosyAAEGray_BG05_mlL1_DMask_amodalClipBox_classAware_br6d/model_final.pth",
     LOAD_DETS_TEST=True,
     PIXEL_MEAN=[0.0, 0.0, 0.0],
     PIXEL_STD=[255.0, 255.0, 255.0],
@@ -127,10 +129,9 @@ MODEL = dict(
 VAL = dict(
     DATASET_NAME="br6d",
     SPLIT_TYPE="",
-    SCRIPT_PATH="lib/pysixd/scripts/eval_pose_results_more.py",
+    SCRIPT_PATH="/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/lib/pysixd/scripts/eval_pose_results_more.py",
     TARGETS_FILENAME="test_targets_bop19.json",
     ERROR_TYPES="vsd,mspd,mssd",
     USE_BOP=True,  # whether to use bop toolkit
 )
-
 TEST = dict(EVAL_PERIOD=0, VIS=False, TEST_BBOX_TYPE="est")  # gt | est

@@ -189,8 +189,8 @@ TRAIN = dict(
 # Specific val options
 # ---------------------------------------------------------------------------- #
 VAL = dict(
-    DATASET_NAME="lm",
-    SCRIPT_PATH="lib/pysixd/scripts/eval_pose_results_more.py",
+    DATASET_NAME="br6d",
+    SCRIPT_PATH="/media/gouda/3C448DDD448D99F2/segmentation/gdrnpp_bop2022/lib/pysixd/scripts/eval_pose_results_more.py",
     RESULTS_PATH="",
     TARGETS_FILENAME="lm_test_targets_bb8.json",  # 'lm_test_targets_bb8.json'
     ERROR_TYPES="ad,rete,re,te,proj",
