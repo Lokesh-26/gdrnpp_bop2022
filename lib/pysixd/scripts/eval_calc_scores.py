@@ -151,13 +151,24 @@ for error_dir_path in p["error_dir_paths"]:
     misc.log("Processing: {}".format(error_dir_path))
 
     time_start = time.time()
+    #  # Parse info about the errors from the folder name.
+    #  error_sign = osp.basename(error_dir_path)
+    #  # err_type = str(error_sign.split("_")[0].split(":")[1])
+    #  err_type = str(error_sign.split("_")[1])
+    #  # n_top = int(error_sign.split("_")[1].split(":")[1])
+    #  n_top = int(error_sign.split("_")[3])
+    #  result_info = osp.basename(osp.dirname(error_dir_path)).split("_")
+    #  method = result_info[0]
+    #  dataset_info = result_info[1].split("-")
+    #  dataset = dataset_info[0]
+    #  split = dataset_info[1]
+    #  split_type = dataset_info[2] if len(dataset_info) > 2 else None
 
     # Parse info about the errors from the folder name.
-    error_sign = osp.basename(error_dir_path)
-    # err_type = str(error_sign.split("_")[0].split(":")[1])
-    err_type = str(error_sign.split("_")[1])
-    n_top = int(error_sign.split("_")[3])
-    result_info = osp.basename(osp.dirname(error_dir_path)).split("_")
+    error_sign = os.path.basename(error_dir_path)
+    err_type = str(error_sign.split("_")[0].split("=")[1])
+    n_top = int(error_sign.split("_")[1].split("=")[1])
+    result_info = os.path.basename(os.path.dirname(error_dir_path)).split("_")
     method = result_info[0]
     dataset_info = result_info[1].split("-")
     dataset = dataset_info[0]

@@ -15,7 +15,6 @@ sys.path.insert(0, osp.join(cur_dir, "../../.."))
 import ref
 from lib.pysixd import misc
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -163,7 +162,8 @@ def get_thr(score_path):
     # scores_th:2.000_min-visib:0.100.json
     # rete: scores_th:10.000-10.000_min-visib:-1.000.json
     # NOTE: assume the same threshold (currently can deal with rete, rete_s)
-    return float(score_path.split("/")[-1].replace("scores_th:", "").split("_")[0].split("-")[0])
+    # return float(score_path.split("/")[-1].replace("scores_th:", "").split("_")[0].split("-")[0])
+    return float(score_path.split("/")[-1].replace("scores_th=", "").split("_")[0])
 
 
 def simplify_float_str(float_str):
@@ -176,8 +176,9 @@ def simplify_float_str(float_str):
 def get_thr_str(score_path):
     # path/to/scores_th:2.000_min-visib:0.100.json  --> 2
     # rete: path/to/scores_th:10.000-10.000_min-visib:-1.000.json --> 10
-    thr_str = score_path.split("/")[-1].split("_")[1]
-    thr_str = thr_str.split(":")[-1]
+    # thr_str = score_path.split("/")[-1].split("_")[1]
+    # thr_str = thr_str.split(":")[-1]
+    thr_str = score_path.split("/")[-1].replace("scores_th=", "").split("_")[0]
     if "-" in thr_str:
         thr_str_split = thr_str.split("-")
         simple_str_list = [simplify_float_str(_thr) for _thr in thr_str_split]
@@ -219,12 +220,12 @@ def get_object_nums_from_targets(targets_path):
 
 
 def summary_scores(
-    score_paths,
-    error_type,
-    val_dataset_name,
-    print_all_objs=False,
-    obj_ids=None,
-    obj_nums_dict=None,
+        score_paths,
+        error_type,
+        val_dataset_name,
+        print_all_objs=False,
+        obj_ids=None,
+        obj_nums_dict=None,
 ):
     data_ref = get_data_ref(val_dataset_name)
 
@@ -274,6 +275,9 @@ def summary_scores(
             else:
                 assert obj_nums_dict is not None
                 sel_obj_nums = np.array([_v for _k, _v in obj_nums_dict.items() if int(_k) in sel_obj_ids])
+                # match the length of sel_obj_recalls and sel_obj_nums
+                # if len(sel_obj_recalls) != len(sel_obj_nums):
+                # sel_obj_recalls = sel_obj_recalls[:len(sel_obj_nums)]  # TODO: check this condition_Might be wrong
                 sel_obj_weights = sel_obj_nums / sum(sel_obj_nums)
                 mean_obj_recall = sum(sel_obj_weights * np.array(sel_obj_recalls))
             cur_tab_col2.append(["Avg({})".format(num_objs), f"{mean_obj_recall * 100:.2f}"])
@@ -340,14 +344,13 @@ def maybe_average_vsd_scores(res_log_tab):
 
 
 def load_and_print_val_scores_tab(
-    cfg,
-    eval_root,
-    result_names,
-    error_types=["projS", "ad", "reteS"],
-    obj_ids=None,
-    print_all_objs=False,
+        cfg,
+        eval_root,
+        result_names,
+        error_types=["projS", "ad", "reteS"],
+        obj_ids=None,
+        print_all_objs=False,
 ):
-
     vsd_deltas = {
         "hb": 15,
         "hbs": 15,

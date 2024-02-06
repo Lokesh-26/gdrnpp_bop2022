@@ -401,9 +401,9 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
     # BR6D.
     elif dataset_name == 'br6d':
         p['scene_ids'] = {
-            'train': list(range(0, 3)),
+            'train': list(range(0, 4)),
             'val': [],
-            'test': list(range(3, 5))
+            'test': list(range(4, 5))
             #'test': [list(range(4, 6))]
         }[split]
         p['im_size'] = (1944, 1200)

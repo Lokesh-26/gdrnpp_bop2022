@@ -1240,25 +1240,41 @@ def overlapping_sphere_projections(radius, p1, p2):
 
     return proj_dist < proj_dist_thresh
 
-
 def get_error_signature(error_type, n_top, **kwargs):
-    """Generates a signature for the specified settings of pose error
-    calculation.
+    """Generates a signature for the specified settings of pose error calculation.
 
     :param error_type: Type of error.
     :param n_top: Top N pose estimates (with the highest score) to be evaluated
       for each object class in each image.
     :return: Generated signature.
     """
-    error_sign = "error_" + error_type + "_ntop_" + str(n_top)
+    error_sign = "error=" + error_type + "_ntop=" + str(n_top)
     if error_type == "vsd":
         if kwargs["vsd_tau"] == float("inf"):
             vsd_tau_str = "inf"
         else:
             vsd_tau_str = "{:.3f}".format(kwargs["vsd_tau"])
-        error_sign += "_delta_{:.3f}_tau_{}".format(kwargs["vsd_delta"], vsd_tau_str)
+        error_sign += "_delta={:.3f}_tau={}".format(kwargs["vsd_delta"], vsd_tau_str)
     return error_sign
-
+#def get_error_signature(error_type, n_top, **kwargs):
+#    """Generates a signature for the specified settings of pose error
+#    calculation.
+#
+#    :param error_type: Type of error.
+#    :param n_top: Top N pose estimates (with the highest score) to be evaluated
+#      for each object class in each image.
+#    :return: Generated signature.
+#    """
+#    error_sign = "error:" + error_type + "_ntop:" + str(n_top)
+#    # error_sign = "error_" + error_type + "_ntop_" + str(n_top)
+#    if error_type == "vsd":
+#        if kwargs["vsd_tau"] == float("inf"):
+#            vsd_tau_str = "inf"
+#        else:
+#            vsd_tau_str = "{:.3f}".format(kwargs["vsd_tau"])
+#        error_sign += "_delta:{:.3f}_tau:{}".format(kwargs["vsd_delta"], vsd_tau_str)
+#        # error_sign += "_delta_{:.3f}_tau_{}".format(kwargs["vsd_delta"], vsd_tau_str)
+#    return error_sign
 
 def get_score_signature(correct_th, visib_gt_min):
     """Generates a signature for a performance score.
@@ -1266,9 +1282,20 @@ def get_score_signature(correct_th, visib_gt_min):
     :param visib_gt_min: Minimum visible surface fraction of a valid GT pose.
     :return: Generated signature.
     """
-    eval_sign = "th_" + "-".join(["{:.3f}".format(t) for t in correct_th])
-    eval_sign += "_min-visib_{:.3f}".format(visib_gt_min)
+    eval_sign = "th=" + "-".join(["{:.3f}".format(t) for t in correct_th])
+    eval_sign += "_min-visib={:.3f}".format(visib_gt_min)
     return eval_sign
+#def get_score_signature(correct_th, visib_gt_min):
+#    """Generates a signature for a performance score.
+#
+#    :param visib_gt_min: Minimum visible surface fraction of a valid GT pose.
+#    :return: Generated signature.
+#    """
+#    eval_sign = "th:" + "-".join(["{:.3f}".format(t) for t in correct_th])
+#    eval_sign += "_min-visib:{:.3f}".format(visib_gt_min)
+#    # eval_sign = "th_" + "-".join(["{:.3f}".format(t) for t in correct_th])
+#    # eval_sign += "_min-visib_{:.3f}".format(visib_gt_min)
+#    return eval_sign
 
 
 def run_meshlab_script(
